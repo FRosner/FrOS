@@ -1,5 +1,8 @@
 build:
-	nasm -f bin boot_sect_simple.asm -o out/boot_sect_simple.bin
+	nasm -f bin mbr.asm -o out/mbr.bin
 
 run: build
-	qemu-system-x86_64 out/boot_sect_simple.bin
+	qemu-system-x86_64 out/mbr.bin
+
+echo: build
+	xxd out/mbr.bin
