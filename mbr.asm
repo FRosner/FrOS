@@ -1,19 +1,28 @@
-[org 0x7c00]
-mov ah, 0x0e
+mov ah, 0x0e ; tty mode
 
-; Having solved the memory offset problem with 'org', this is now the correct answer
-mov al, "2"
-int 0x10
-mov al, [the_secret]
-int 0x10
+; bp = base pointer, sp = stack pointer
+mov bp, 0x8000 ; this is an address far away from 0x7c00 so that we don't get overwritten
+mov sp, bp ; if the stack is empty then sp points to bp
 
-jmp $ ; infinite loop
+push 'A'
+push 'B'
+push 'C'
 
-the_secret:
-    ; ASCII code 0x58 ('X') is stored just before the zero-padding.
-    ; On this code that is at byte 0x2d (check it out using 'xxd file.bin')
-    db "X"
+; recover our characters using the standard procedure: 'pop'
+; We can only pop full words so we need an auxiliary register to manipulate
+; the lower byte
+pop bx
+mov al, bl
+int 0x10 ; prints C
 
-; zero padding and magic bios number
+pop bx
+mov al, bl
+int 0x10 ; prints B
+
+pop bx
+mov al, bl
+int 0x10 ; prints A
+
+jmp $
 times 510-($-$$) db 0
 dw 0xaa55
