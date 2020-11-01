@@ -1,12 +1,18 @@
-build:
-	nasm -f bin mbr.asm -o out/mbr.bin
-
-run: build
+run: build-bootsector build-kernel
 	qemu-system-x86_64 out/mbr.bin
 
-echo: build
+build-bootsector:
+	nasm -f bin mbr.asm -o out/mbr.bin
+
+echo-bootsector: build-bootsector
 	xxd out/mbr.bin
 
-c:
-	gcc -ffreestanding -c basic.c -o out/basic.o
-	objdump -d out/basic.o
+build-kernel:
+	x86_64-elf-gcc -ffreestanding -c kernel.c -o out/kernel.o
+	x86_64-elf-ld -o out/kernel.bin -Ttext 0x0 --oformat binary out/kernel.o
+
+echo-kernel: build-kernel
+	xxd out/kernel.bin
+
+decompile-kernel: build-kernel
+	ndisasm -b 32 out/kernel.bin
