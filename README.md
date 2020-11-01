@@ -24,9 +24,26 @@ brew install i386-elf-gdb
 ```
 
 ```
-export PATH="/usr/local/Cellar/x86_64-elf-binutils/<version>/bin/:/usr/local/Cellar/x86_64-elf-gcc/<version>/bin/:$PATH"
+export PATH="/usr/local/Cellar/x86_64-elf-binutils/<version>/bin/:/usr/local/Cellar/x86_64-elf-gcc/<version>/bin/:/usr/local/Cellar/i386-elf-gdb/<version>/bin:$PATH"
 ```
 
 ## Usage
 
-- `make run`
+### Boot
+
+```
+make run
+```
+
+### Debug
+
+```
+make debug
+```
+
+In GDB shell:
+
+- Set breakpoint at function (e.g. `main`): `b main`
+- Start execution: `c`
+- Jump to next instruction: `n`
+- Print variable: `p <variable_name>`
