@@ -13,11 +13,11 @@ call load_kernel ; read the kernel from disk
 call switch_to_32bit ; disable interrupts, load GDT,  etc. Finally jumps to 'BEGIN_PM'
 jmp $ ; Never executed
 
-%include "print-16bit.asm"
-%include "print-32bit.asm"
-%include "disk.asm"
-%include "gdt.asm"
-%include "switch-to-32bit.asm"
+%include "boot/print-16bit.asm"
+%include "boot/print-32bit.asm"
+%include "boot/disk.asm"
+%include "boot/gdt.asm"
+%include "boot/switch-to-32bit.asm"
 
 [bits 16]
 load_kernel:
