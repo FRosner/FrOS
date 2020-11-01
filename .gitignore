@@ -1,1 +1,3 @@
-out
+*.o
+*.bin
+*.dis

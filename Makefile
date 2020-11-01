@@ -1,18 +1,35 @@
-run: build-bootsector build-kernel
-	qemu-system-x86_64 out/mbr.bin
+# $@ = target file
+# $< = first dependency
+# $^ = all dependencies
 
-build-bootsector:
-	nasm -f bin mbr.asm -o out/mbr.bin
+# First rule is the one executed when no parameters are fed to the Makefile
+all: run
 
-echo-bootsector: build-bootsector
-	xxd out/mbr.bin
+# Notice how dependencies are built as needed
+kernel.bin: kernel_entry.o kernel.o
+	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
 
-build-kernel:
-	x86_64-elf-gcc -ffreestanding -c kernel.c -o out/kernel.o
-	x86_64-elf-ld -o out/kernel.bin -Ttext 0x0 --oformat binary out/kernel.o
+kernel_entry.o: kernel_entry.asm
+	nasm $< -f elf -o $@
 
-echo-kernel: build-kernel
-	xxd out/kernel.bin
+kernel.o: kernel.c
+	x86_64-elf-gcc -m32 -ffreestanding -c $< -o $@
 
-decompile-kernel: build-kernel
-	ndisasm -b 32 out/kernel.bin
+# Disassemble
+kernel.dis: kernel.bin
+	ndisasm -b 32 $< > $@
+
+mbr.bin: mbr.asm
+	nasm $< -f bin -o $@
+
+os-image.bin: mbr.bin kernel.bin
+	cat $^ > $@
+
+run: os-image.bin
+	qemu-system-i386 -fda $<
+
+echo: os-image.bin
+	xxd $<
+
+clean:
+	$(RM) *.bin *.o *.dis
