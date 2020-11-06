@@ -28,19 +28,10 @@ disk_load:
 
 
 disk_error:
-    mov bx, DISK_ERROR
-    call print16
-    call print16_nl
-    mov dh, ah ; ah = error code, dl = disk drive that dropped the error
-    call print16_hex ; check out the code at http://stanislavs.org/helppc/int_13-1.html
     jmp disk_loop
 
 sectors_error:
-    mov bx, SECTORS_ERROR
-    call print16
+    jmp disk_loop
 
 disk_loop:
     jmp $
-
-DISK_ERROR: db "Disk read error", 0
-SECTORS_ERROR: db "Incorrect number of sectors read", 0
