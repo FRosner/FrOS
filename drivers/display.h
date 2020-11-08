@@ -8,4 +8,4 @@
 #define REG_SCREEN_DATA 0x3d5
 
 /* Public kernel API */
-void print_char(char character, int col, int row);
+void print_char_at(char character, int col, int row);
