@@ -4,9 +4,9 @@
 void set_cursor(int offset) {
     offset /= 2;
     port_byte_out(REG_SCREEN_CTRL, 14);
-    port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset >> 8));
+    port_byte_out(REG_SCREEN_DATA, (unsigned char) (offset >> 8));
     port_byte_out(REG_SCREEN_CTRL, 15);
-    port_byte_out(REG_SCREEN_DATA, (unsigned char)(offset & 0xff));
+    port_byte_out(REG_SCREEN_DATA, (unsigned char) (offset & 0xff));
 }
 
 int get_cursor() {
@@ -21,16 +21,20 @@ int get_offset(int col, int row) {
     return 2 * (row * MAX_COLS + col);
 }
 
+void set_char_at_video_memory(char character, int offset) {
+    unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
+    vidmem[offset] = character;
+    vidmem[offset + 1] = WHITE_ON_BLACK;
+}
+
 /*
  * TODO:
  * - handle illegal offset (print error message somewhere)
  * - handle newline characters (move cursor to beginning of next line)
  */
 void print_char_at_offset(char character, int offset) {
-    unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
 
-    vidmem[offset] = character;
-    vidmem[offset + 1] = WHITE_ON_BLACK;
+    set_char_at_video_memory(character, offset);
 
     offset += 2;
     set_cursor(offset);
@@ -50,7 +54,7 @@ void print_char(char character) {
     print_char_at_offset(character, get_cursor());
 }
 
-void print_string(char* string) {
+void print_string(char *string) {
     int i = 0;
     while (string[i] != 0) {
         print_char(string[i++]);
@@ -70,7 +74,7 @@ void print_nl() {
 void clear_screen() {
     int screen_size = MAX_COLS * MAX_ROWS;
     for (int i = 0; i < screen_size; ++i) {
-        print_char_at_offset(' ', i * 2);
+        set_char_at_video_memory(' ', i * 2);
     }
     set_cursor(get_offset(0, 0));
 }
