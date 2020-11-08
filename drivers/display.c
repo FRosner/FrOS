@@ -66,3 +66,11 @@ void print_nl() {
     int row = get_row_from_offset(offset);
     set_cursor(get_offset(0, row + 1));
 }
+
+void clear_screen() {
+    int screen_size = MAX_COLS * MAX_ROWS;
+    for (int i = 0; i < screen_size; ++i) {
+        print_char_at_offset(' ', i * 2);
+    }
+    set_cursor(get_offset(0, 0));
+}

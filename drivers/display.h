@@ -12,3 +12,4 @@ void print_char_at(char character, int col, int row);
 void print_char(char character);
 void print_string(char* string);
 void print_nl();
+void clear_screen();
