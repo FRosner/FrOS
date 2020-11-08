@@ -3,7 +3,11 @@
 ## Description
 
 Based on 
-Carlos Fenollosas [OS tutorial](https://github.com/cfenollosa/os-tutorial), which is based on [Writing a Simple Operating System — from Scratch](https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf) and the [OS Dev wiki](https://wiki.osdev.org/Meaty_Skeleton).
+Carlos Fenollosas [OS tutorial](https://github.com/cfenollosa/os-tutorial), which is heavily influenced by
+
+- [Writing a Simple Operating System — from Scratch](https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf)
+- [OS Dev wiki](https://wiki.osdev.org/Meaty_Skeleton)
+- [JamesM's kernel development tutorials](https://web.archive.org/web/20160412174753/http://www.jamesmolloy.co.uk/tutorial_html/index.html)
 
 ## Setup
 
