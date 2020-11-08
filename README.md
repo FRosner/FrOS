@@ -6,7 +6,7 @@ This is a simple x86 32 bit operating system written from scratch, based on Carl
 
 1. Boot loader
 2. Operating system kernel, including
-    3. VGA driver
+    1. VGA driver
 
 ## Setup
 
