@@ -65,6 +65,9 @@ void print_char_at(char character, int col, int row) {
  * Print character at cursor.
  */
 void print_char(char character) {
+    if (get_cursor() >= MAX_ROWS * MAX_COLS * 2) {
+        scroll_ln();
+    }
     print_char_at_offset(character, get_cursor());
 }
 
