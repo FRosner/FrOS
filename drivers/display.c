@@ -56,3 +56,13 @@ void print_string(char* string) {
         print_char(string[i++]);
     }
 }
+
+int get_row_from_offset(int offset) {
+    return offset / (2 * MAX_COLS);
+}
+
+void print_nl() {
+    int offset = get_cursor();
+    int row = get_row_from_offset(offset);
+    set_cursor(get_offset(0, row + 1));
+}
