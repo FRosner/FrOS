@@ -21,6 +21,11 @@ int get_offset(int col, int row) {
     return 2 * (row * MAX_COLS + col);
 }
 
+/*
+ * TODO:
+ * - handle illegal offset (print error message somewhere)
+ * - handle newline characters (move cursor to beginning of next line)
+ */
 void print_char_at_offset(char character, int offset) {
     unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
 
@@ -43,4 +48,11 @@ void print_char_at(char character, int col, int row) {
  */
 void print_char(char character) {
     print_char_at_offset(character, get_cursor());
+}
+
+void print_string(char* string) {
+    int i = 0;
+    while (string[i] != 0) {
+        print_char(string[i++]);
+    }
 }
