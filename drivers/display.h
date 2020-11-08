@@ -13,3 +13,4 @@ void print_char(char character);
 void print_string(char* string);
 void print_nl();
 void clear_screen();
+void scroll_ln();

@@ -1,5 +1,6 @@
 #include "display.h"
 #include "ports.h"
+#include "../kernel/util.h"
 
 void set_cursor(int offset) {
     offset /= 2;
@@ -27,13 +28,26 @@ void set_char_at_video_memory(char character, int offset) {
     vidmem[offset + 1] = WHITE_ON_BLACK;
 }
 
+void scroll_ln() {
+    for (int row = 1; row < MAX_ROWS; row++) {
+        memory_copy((char*) (get_offset(0, row) + VIDEO_ADDRESS),
+                    (char*) (get_offset(0, row - 1) + VIDEO_ADDRESS),
+                    MAX_COLS * 2);
+    }
+
+    for (int col = 0; col < MAX_COLS * 2; col++) {
+        set_char_at_video_memory(' ', get_offset(col, MAX_ROWS - 1));
+    }
+    
+    set_cursor(get_cursor() - 2 * MAX_COLS);
+}
+
 /*
  * TODO:
  * - handle illegal offset (print error message somewhere)
  * - handle newline characters (move cursor to beginning of next line)
  */
 void print_char_at_offset(char character, int offset) {
-
     set_char_at_video_memory(character, offset);
 
     offset += 2;
