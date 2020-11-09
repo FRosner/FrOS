@@ -22,6 +22,14 @@ int get_offset(int col, int row) {
     return 2 * (row * MAX_COLS + col);
 }
 
+int get_row_from_offset(int offset) {
+    return offset / (2 * MAX_COLS);
+}
+
+int move_offset_to_new_line(int offset) {
+    return get_offset(0, get_row_from_offset(offset) + 1);
+}
+
 void set_char_at_video_memory(char character, int offset) {
     unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
     vidmem[offset] = character;
@@ -54,21 +62,19 @@ void print_string(char *string) {
     }
     int i = 0;
     while (string[i] != 0) {
-        set_char_at_video_memory(string[i], offset);
+        if (string[i] == '\n') {
+            offset = move_offset_to_new_line(offset);
+        } else {
+            set_char_at_video_memory(string[i], offset);
+            offset += 2;
+        }
         i++;
-        offset += 2;
     }
     set_cursor(offset);
 }
 
-int get_row_from_offset(int offset) {
-    return offset / (2 * MAX_COLS);
-}
-
 void print_nl() {
-    int offset = get_cursor();
-    int row = get_row_from_offset(offset);
-    set_cursor(get_offset(0, row + 1));
+    set_cursor(move_offset_to_new_line(get_cursor()));
 }
 
 void clear_screen() {
