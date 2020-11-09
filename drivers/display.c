@@ -28,7 +28,7 @@ void set_char_at_video_memory(char character, int offset) {
     vidmem[offset + 1] = WHITE_ON_BLACK;
 }
 
-void scroll_ln() {
+int scroll_ln(int offset) {
     for (int row = 1; row < MAX_ROWS; row++) {
         memory_copy((char*) (get_offset(0, row) + VIDEO_ADDRESS),
                     (char*) (get_offset(0, row - 1) + VIDEO_ADDRESS),
@@ -39,7 +39,7 @@ void scroll_ln() {
         set_char_at_video_memory(' ', get_offset(col, MAX_ROWS - 1));
     }
     
-    set_cursor(get_cursor() - 2 * MAX_COLS);
+    return offset - 2 * MAX_COLS;
 }
 
 /*
@@ -47,35 +47,18 @@ void scroll_ln() {
  * - handle illegal offset (print error message somewhere)
  * - handle newline characters (move cursor to beginning of next line)
  */
-void print_char_at_offset(char character, int offset) {
-    set_char_at_video_memory(character, offset);
-
-    offset += 2;
-    set_cursor(offset);
-}
-
-/*
- * Print character on screen at specified position.
- */
-void print_char_at(char character, int col, int row) {
-    print_char_at_offset(character, get_offset(col, row));
-}
-
-/*
- * Print character at cursor.
- */
-void print_char(char character) {
-    if (get_cursor() >= MAX_ROWS * MAX_COLS * 2) {
-        scroll_ln();
-    }
-    print_char_at_offset(character, get_cursor());
-}
-
 void print_string(char *string) {
+    int offset = get_cursor();
+    if (offset >= MAX_ROWS * MAX_COLS * 2) {
+        offset = scroll_ln(offset);
+    }
     int i = 0;
     while (string[i] != 0) {
-        print_char(string[i++]);
+        set_char_at_video_memory(string[i], offset);
+        i++;
+        offset += 2;
     }
+    set_cursor(offset);
 }
 
 int get_row_from_offset(int offset) {
