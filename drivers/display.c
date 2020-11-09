@@ -37,31 +37,30 @@ void set_char_at_video_memory(char character, int offset) {
 }
 
 int scroll_ln(int offset) {
-    for (int row = 1; row < MAX_ROWS; row++) {
-        memory_copy((char*) (get_offset(0, row) + VIDEO_ADDRESS),
-                    (char*) (get_offset(0, row - 1) + VIDEO_ADDRESS),
-                    MAX_COLS * 2);
-    }
+    memory_copy(
+            (char *) (get_offset(0, 1) + VIDEO_ADDRESS),
+            (char *) (get_offset(0, 0) + VIDEO_ADDRESS),
+            MAX_COLS * (MAX_ROWS - 1) * 2
+    );
 
-    for (int col = 0; col < MAX_COLS * 2; col++) {
+    for (int col = 0; col < MAX_COLS; col++) {
         set_char_at_video_memory(' ', get_offset(col, MAX_ROWS - 1));
     }
-    
+
     return offset - 2 * MAX_COLS;
 }
 
 /*
  * TODO:
  * - handle illegal offset (print error message somewhere)
- * - handle newline characters (move cursor to beginning of next line)
  */
 void print_string(char *string) {
     int offset = get_cursor();
-    if (offset >= MAX_ROWS * MAX_COLS * 2) {
-        offset = scroll_ln(offset);
-    }
     int i = 0;
     while (string[i] != 0) {
+        if (offset >= MAX_ROWS * MAX_COLS * 2) {
+            offset = scroll_ln(offset);
+        }
         if (string[i] == '\n') {
             offset = move_offset_to_new_line(offset);
         } else {
@@ -74,7 +73,11 @@ void print_string(char *string) {
 }
 
 void print_nl() {
-    set_cursor(move_offset_to_new_line(get_cursor()));
+    int newOffset = move_offset_to_new_line(get_cursor());
+    if (newOffset >= MAX_ROWS * MAX_COLS * 2) {
+        newOffset = scroll_ln(newOffset);
+    }
+    set_cursor(newOffset);
 }
 
 void clear_screen() {
