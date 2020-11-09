@@ -3,11 +3,9 @@
 
 void main() {
     clear_screen();
-    print_string("Hello World!");
-    print_nl();
     char* line;
-    for (int i = 0; i < 100; ++i) {
-        int_to_string(i, line, 10);
+    for (int i = 1; i <= 35; ++i) {
+        int_to_string(i, line, 50);
         print_string(line);
         print_nl();
     }
