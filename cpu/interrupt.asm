@@ -14,7 +14,9 @@ isr_common_stub:
 	mov gs, ax
 
     ; 2. Call C handler
+    push esp ; push registers_t *r pointer
 	call isr_handler
+	pop eax ; clear pointer afterwards
 
     ; 3. Restore state
 	pop eax

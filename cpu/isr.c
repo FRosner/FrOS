@@ -81,12 +81,12 @@ char *exception_messages[] = {
         "Reserved"
 };
 
-void isr_handler(registers_t r) {
+void isr_handler(registers_t *r) {
     print_string("received interrupt: ");
     char s[3];
-    int_to_string(r.int_no, s, 10);
+    int_to_string(r->int_no, s, 10);
     print_string(s);
     print_nl();
-    print_string(exception_messages[r.int_no]);
+    print_string(exception_messages[r->int_no]);
     print_nl();
 }
