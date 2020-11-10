@@ -1,6 +1,6 @@
-#include "../cpu/types.h"
+#include <stdint.h>
 
-void memory_copy(u8 *source, u8 *dest, u32 nbytes) {
+void memory_copy(uint8_t *source, uint8_t *dest, uint32_t nbytes) {
     int i;
     for (i = 0; i < nbytes; i++) {
         *(dest + i) = *(source + i);
