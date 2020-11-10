@@ -57,3 +57,4 @@ In GDB shell:
 - [OS Dev Wiki](https://wiki.osdev.org/Meaty_Skeleton)
 - [JamesM's Kernel Development Tutorials](https://web.archive.org/web/20160412174753/http://www.jamesmolloy.co.uk/tutorial_html/index.html)
 - [BrokenThorn Entertainment's Operating System Development Series](http://www.brokenthorn.com/Resources/OSDevIndex.html)
+- [The Little Book About OS Development](https://littleosbook.github.io/)
