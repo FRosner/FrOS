@@ -1,6 +1,8 @@
 #include "../cpu/idt.h"
 #include "../cpu/isr.h"
+#include "../cpu/timer.h"
 #include "../drivers/display.h"
+#include "../drivers/keyboard.h"
 
 #include "util.h"
 
@@ -9,5 +11,9 @@ void start_kernel() {
     print_string("Installing interrupt service routines (ISRs).\n");
     isr_install();
 
-    asm volatile("int $3");
+    print_string("Enabling external interrupts.\n");
+    asm volatile("sti");
+
+    print_string("Initializing keyboard (IRQ 1).\n");
+    init_keyboard();
 }
