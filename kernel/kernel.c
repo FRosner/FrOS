@@ -9,5 +9,5 @@ void start_kernel() {
     print_string("Installing interrupt service routines (ISRs).\n");
     isr_install();
 
-    __asm__ __volatile__("int $3");
+    asm volatile("int $3");
 }
