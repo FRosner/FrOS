@@ -1,2 +1,5 @@
-void memory_copy(char *source, char *dest, int nbytes);
+#include "../cpu/types.h"
+
+void memory_copy(u8 *source, u8 *dest, u32 nbytes);
+
 char *int_to_string(int v, char *buff, int radix_base);

@@ -1,5 +1,6 @@
 #include "display.h"
 #include "ports.h"
+#include "../cpu/types.h"
 #include "../kernel/util.h"
 
 void set_cursor(int offset) {
@@ -31,15 +32,15 @@ int move_offset_to_new_line(int offset) {
 }
 
 void set_char_at_video_memory(char character, int offset) {
-    unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
+    u8 *vidmem = (u8 *) VIDEO_ADDRESS;
     vidmem[offset] = character;
     vidmem[offset + 1] = WHITE_ON_BLACK;
 }
 
 int scroll_ln(int offset) {
     memory_copy(
-            (char *) (get_offset(0, 1) + VIDEO_ADDRESS),
-            (char *) (get_offset(0, 0) + VIDEO_ADDRESS),
+            (u8 *) (get_offset(0, 1) + VIDEO_ADDRESS),
+            (u8 *) (get_offset(0, 0) + VIDEO_ADDRESS),
             MAX_COLS * (MAX_ROWS - 1) * 2
     );
 
