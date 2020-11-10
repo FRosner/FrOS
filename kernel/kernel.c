@@ -1,12 +1,13 @@
+#include "../cpu/idt.h"
+#include "../cpu/isr.h"
 #include "../drivers/display.h"
+
 #include "util.h"
 
 void start_kernel() {
     clear_screen();
-    char* line;
-    for (int i = 1; i <= 35; ++i) {
-        int_to_string(i, line, 50);
-        print_string(line);
-        print_nl();
-    }
+    print_string("Installing interrupt service routines (ISRs).\n");
+    isr_install();
+
+    __asm__ __volatile__("int $3");
 }
