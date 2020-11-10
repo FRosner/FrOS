@@ -67,7 +67,13 @@ extern void isr30();
 
 extern void isr31();
 
-/* Struct which aggregates many registers */
+/* Struct which aggregates many registers.
+ * It matches exactly the pushes on interrupt.asm. From the bottom:
+ * - Pushed by the processor automatically
+ * - `push byte`s on the isr-specific code: error code, then int number
+ * - All the registers by pusha
+ * - `push eax` whose lower 16-bits contain DS
+ */
 typedef struct {
     uint32_t ds; /* Data segment selector */
     uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax; /* Pushed by pusha. */
