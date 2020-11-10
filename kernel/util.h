@@ -7,4 +7,8 @@
 
 void memory_copy(uint8_t *source, uint8_t *dest, uint32_t nbytes);
 
-char *int_to_string(int v, char *buff, int radix_base);
+int string_length(char s[]);
+
+void reverse(char s[]);
+
+void int_to_string(int n, char str[]);

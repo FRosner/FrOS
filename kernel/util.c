@@ -7,17 +7,31 @@ void memory_copy(uint8_t *source, uint8_t *dest, uint32_t nbytes) {
     }
 }
 
-// https://stackoverflow.com/questions/9994742/want-to-convert-integer-to-string-without-itoa-function
-char *int_to_string(int v, char *buff, int radix_base) {
-    static char table[] = "0123456789abcdefghijklmnopqrstuvwxyz";
-    char *p = buff;
-    unsigned int n = (v < 0 && radix_base == 10) ? -v : (unsigned int) v;
-    while (n >= radix_base) {
-        *p++ = table[n % radix_base];
-        n /= radix_base;
+int string_length(char s[]) {
+    int i = 0;
+    while (s[i] != '\0') ++i;
+    return i;
+}
+
+void reverse(char s[]) {
+    int c, i, j;
+    for (i = 0, j = string_length(s)-1; i < j; i++, j--) {
+        c = s[i];
+        s[i] = s[j];
+        s[j] = c;
     }
-    *p++ = table[n];
-    if (v < 0 && radix_base == 10) *p++ = '-';
-    *p = '\0';
-    return buff;
+}
+
+void int_to_string(int n, char str[]) {
+    int i, sign;
+    if ((sign = n) < 0) n = -n;
+    i = 0;
+    do {
+        str[i++] = n % 10 + '0';
+    } while ((n /= 10) > 0);
+
+    if (sign < 0) str[i++] = '-';
+    str[i] = '\0';
+
+    reverse(str);
 }
