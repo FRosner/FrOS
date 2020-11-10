@@ -24,7 +24,6 @@ isr_common_stub:
 	mov gs, ax
 	popa
 	add esp, 8 ; Cleans up the pushed error code and pushed ISR number
-	sti
 	iret ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
 
 ; We don't get information about which interrupt was caller
