@@ -46,7 +46,7 @@ make debug
 
 In GDB shell:
 
-- Set breakpoint at function (e.g. `main`): `b main`
+- Set breakpoint at function (e.g. `start_kernel`): `b start_kernel`
 - Start execution: `c`
 - Jump to next instruction: `n`
 - Print variable: `p <variable_name>`

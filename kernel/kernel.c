@@ -1,7 +1,7 @@
 #include "../drivers/display.h"
 #include "util.h"
 
-void main() {
+void start_kernel() {
     clear_screen();
     char* line;
     for (int i = 1; i <= 35; ++i) {
