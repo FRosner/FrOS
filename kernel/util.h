@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../cpu/types.h"
 
 void memory_copy(u8 *source, u8 *dest, u32 nbytes);
