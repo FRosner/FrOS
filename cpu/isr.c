@@ -72,7 +72,7 @@ void isr_install() {
     set_idt_gate(46, (uint32_t)irq14);
     set_idt_gate(47, (uint32_t)irq15);
 
-    set_idt(); // Load with ASM
+    load_idt(); // Load with ASM
 }
 
 /* To print the message which defines every exception */
