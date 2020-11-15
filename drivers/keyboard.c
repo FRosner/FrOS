@@ -178,7 +178,7 @@ void print_letter(uint8_t scancode) {
             print_string("LAlt");
             break;
         case 0x39:
-            print_string("Spc");
+            print_string("Space");
             break;
         default:
             /* 'keuyp' event corresponds to the 'keydown' + 0x80
@@ -195,13 +195,7 @@ void print_letter(uint8_t scancode) {
 }
 
 static void keyboard_callback(registers_t *regs) {
-    /* The PIC leaves us the scancode in port 0x60 */
     uint8_t scancode = port_byte_in(0x60);
-    char *sc_ascii;
-    int_to_string(scancode, sc_ascii);
-    print_string("Keyboard scancode: ");
-    print_string(sc_ascii);
-    print_string(", ");
     print_letter(scancode);
     print_nl();
 }
