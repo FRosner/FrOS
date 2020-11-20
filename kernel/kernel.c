@@ -26,7 +26,7 @@ void user_input(char *input) {
         print_string("Stopping the CPU. Bye!\n");
         asm volatile("hlt");
     }
-    print_string("You said: ");
+    print_string("Unknown command: ");
     print_string(input);
     print_string("\n> ");
 }
