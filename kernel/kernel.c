@@ -16,4 +16,17 @@ void start_kernel() {
 
     print_string("Initializing keyboard (IRQ 1).\n");
     init_keyboard();
+
+    clear_screen();
+    print_string("> ");
+}
+
+void user_input(char *input) {
+    if (compare_string(input, "EXIT") == 0) {
+        print_string("Stopping the CPU. Bye!\n");
+        asm volatile("hlt");
+    }
+    print_string("You said: ");
+    print_string(input);
+    print_string("\n> ");
 }

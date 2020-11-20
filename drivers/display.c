@@ -88,3 +88,9 @@ void clear_screen() {
     }
     set_cursor(get_offset(0, 0));
 }
+
+void print_backspace() {
+    set_cursor(get_cursor() - 2);
+    print_string(" ");
+    set_cursor(get_cursor() - 2);
+}
