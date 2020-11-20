@@ -34,13 +34,12 @@ static void keyboard_callback(registers_t *regs) {
         }
     } else if (scancode == ENTER) {
         print_nl();
-        user_input(key_buffer); /* kernel-controlled function */
+        user_input(key_buffer);
         key_buffer[0] = '\0';
     } else {
-        char letter = sc_ascii[(int)scancode];
-        /* Remember that kprint only accepts char[] */
-        char str[2] = {letter, '\0'};
+        char letter = sc_ascii[(int) scancode];
         append(key_buffer, letter);
+        char str[2] = {letter, '\0'};
         print_string(str);
     }
 }
