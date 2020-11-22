@@ -29,7 +29,7 @@ static void keyboard_callback(registers_t *regs) {
     uint8_t scancode = port_byte_in(0x60);
     if (scancode > SC_MAX) return;
     if (scancode == BACKSPACE) {
-        if (backspace(key_buffer) == true) {
+        if (backspace(key_buffer)) {
             print_backspace();
         }
     } else if (scancode == ENTER) {
