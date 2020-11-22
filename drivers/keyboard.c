@@ -34,7 +34,7 @@ static void keyboard_callback(registers_t *regs) {
         }
     } else if (scancode == ENTER) {
         print_nl();
-        user_input(key_buffer);
+        execute_command(key_buffer);
         key_buffer[0] = '\0';
     } else {
         char letter = sc_ascii[(int) scancode];

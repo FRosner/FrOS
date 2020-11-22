@@ -21,7 +21,7 @@ void start_kernel() {
     print_string("> ");
 }
 
-void user_input(char *input) {
+void execute_command(char *input) {
     if (compare_string(input, "EXIT") == 0) {
         print_string("Stopping the CPU. Bye!\n");
         asm volatile("hlt");

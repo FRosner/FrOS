@@ -1,3 +1,3 @@
 #pragma once
 
-void user_input(char *input);
+void execute_command(char *input);
