@@ -56,25 +56,25 @@ void *mem_alloc(size_t size) {
     }
 
     if (best_mem_block != NULL_POINTER) {
-        dynamic_mem_node_t *heapNodeAllocate;
+        dynamic_mem_node_t *mem_node_allocate;
 
         /* found a matching block, split it up and return the top of the memory area to the user */
         /* the best matching block is decreased by the needed memory area*/
         best_mem_block->size = best_mem_block->size - size - dynamic_mem_node_t_SIZE;
         /* new heap node is after the current heap + the size of its control data + allocated memory size */
-        heapNodeAllocate = (dynamic_mem_node_t *) (((uint8_t *) best_mem_block) + dynamic_mem_node_t_SIZE +
+        mem_node_allocate = (dynamic_mem_node_t *) (((uint8_t *) best_mem_block) + dynamic_mem_node_t_SIZE +
                                                    best_mem_block->size);
-        heapNodeAllocate->size = size;
-        heapNodeAllocate->used = 1;
-        heapNodeAllocate->next = best_mem_block->next;
-        heapNodeAllocate->prev = best_mem_block;
+        mem_node_allocate->size = size;
+        mem_node_allocate->used = 1;
+        mem_node_allocate->next = best_mem_block->next;
+        mem_node_allocate->prev = best_mem_block;
         if (best_mem_block->next != NULL_POINTER) {
             /* next block exists */
-            best_mem_block->next->prev = heapNodeAllocate;
+            best_mem_block->next->prev = mem_node_allocate;
         }
-        best_mem_block->next = heapNodeAllocate;
+        best_mem_block->next = mem_node_allocate;
         /* return pointer to memory of new heap node after control data */
-        return (void *) ((uint8_t *) heapNodeAllocate + dynamic_mem_node_t_SIZE);
+        return (void *) ((uint8_t *) mem_node_allocate + dynamic_mem_node_t_SIZE);
     }
 
     return NULL_POINTER;
@@ -86,45 +86,45 @@ void mem_free(void *p) {
     }
 
     /* get actual heap node */
-    dynamic_mem_node_t *currentBlock = (dynamic_mem_node_t *) ((uint8_t *) p - dynamic_mem_node_t_SIZE);
+    dynamic_mem_node_t *current_block = (dynamic_mem_node_t *) ((uint8_t *) p - dynamic_mem_node_t_SIZE);
 
-    if (currentBlock == NULL_POINTER) {
+    if (current_block == NULL_POINTER) {
         return;
     }
 
-    currentBlock->used = 0;
+    current_block->used = 0;
 
     /* check if we can merge with next block */
-    if (currentBlock->next != NULL_POINTER) {
-        if (!currentBlock->next->used) {
+    if (current_block->next != NULL_POINTER) {
+        if (!current_block->next->used) {
             /* add size of next block and its control data to current block */
-            currentBlock->size += currentBlock->next->size;
-            currentBlock->size += dynamic_mem_node_t_SIZE;
+            current_block->size += current_block->next->size;
+            current_block->size += dynamic_mem_node_t_SIZE;
 
             /* remove next block */
             /* link current block to next-next block */
-            currentBlock->next = currentBlock->next->next;
+            current_block->next = current_block->next->next;
             /* link next-next block to current block if next-next block exists */
-            if (currentBlock->next != NULL_POINTER) /* currentBlock->next points to next-next block already! */
+            if (current_block->next != NULL_POINTER) /* current_block->next points to next-next block already! */
             {
-                currentBlock->next->prev = currentBlock;
+                current_block->next->prev = current_block;
             }
         }
     }
 
     /* check if we can merge with previous block */
-    if (currentBlock->prev != NULL_POINTER) {
-        if (!currentBlock->prev->used) {
+    if (current_block->prev != NULL_POINTER) {
+        if (!current_block->prev->used) {
             /* add size of freed memory block and its control data to previous block */
-            currentBlock->prev->size += currentBlock->size;
-            currentBlock->prev->size += dynamic_mem_node_t_SIZE;
+            current_block->prev->size += current_block->size;
+            current_block->prev->size += dynamic_mem_node_t_SIZE;
 
             /* remove freed block from list */
             /* link previous block to next block */
-            currentBlock->prev->next = currentBlock->next;
+            current_block->prev->next = current_block->next;
             /* link next block to previous block if next block exists */
-            if (currentBlock->next != NULL_POINTER) {
-                currentBlock->next->prev = currentBlock->prev;
+            if (current_block->next != NULL_POINTER) {
+                current_block->next->prev = current_block->prev;
             }
         }
     }

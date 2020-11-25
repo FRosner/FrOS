@@ -29,7 +29,7 @@ void start_kernel() {
     } else {
         // Get the elements of the array
         for (int i = 0; i < n; ++i) {
-            ptr[i] = i + 1;
+            ptr[i] = i + 1; // shorthand for *(ptr + i)
         }
 
         for (int i = 0; i < n; ++i) {
