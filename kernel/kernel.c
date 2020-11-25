@@ -5,6 +5,7 @@
 #include "../drivers/keyboard.h"
 
 #include "util.h"
+#include "mem.h"
 
 void start_kernel() {
     clear_screen();
@@ -17,7 +18,26 @@ void start_kernel() {
     print_string("Initializing keyboard (IRQ 1).\n");
     init_keyboard();
 
+    print_string("Initializing dynamic memory.\n");
+    init_dynamic_mem();
+
     clear_screen();
+    int n = 5;
+    int *ptr = (int *) mem_alloc(n * sizeof(int));
+    if (ptr == NULL_POINTER) {
+        print_string("Memory not allocated.\n");
+    } else {
+        // Get the elements of the array
+        for (int i = 0; i < n; ++i) {
+            ptr[i] = i + 1;
+        }
+
+        for (int i = 0; i < n; ++i) {
+            char str[256];
+            int_to_string(ptr[i], str);
+            print_string(str);
+        }
+    }
     print_string("> ");
 }
 
