@@ -90,6 +90,37 @@ void *mem_alloc(size_t size) {
     return NULL_POINTER;
 }
 
+void *merge_next_node_into_current(dynamic_mem_node_t *current_mem_node) {
+    dynamic_mem_node_t *next_mem_node = current_mem_node->next;
+    if (next_mem_node != NULL_POINTER && !next_mem_node->used) {
+        // add size of next block to current block
+        current_mem_node->size += current_mem_node->next->size;
+        current_mem_node->size += DYNAMIC_MEM_NODE_SIZE;
+
+        // remove next block from list
+        current_mem_node->next = current_mem_node->next->next;
+        if (current_mem_node->next != NULL_POINTER) {
+            current_mem_node->next->prev = current_mem_node;
+        }
+    }
+    return current_mem_node;
+}
+
+void *merge_current_node_into_previous(dynamic_mem_node_t *current_mem_node) {
+    dynamic_mem_node_t *prev_mem_node = current_mem_node->prev;
+    if (prev_mem_node != NULL_POINTER && !prev_mem_node->used) {
+        // add size of previous block to current block
+        prev_mem_node->size += current_mem_node->size;
+        prev_mem_node->size += DYNAMIC_MEM_NODE_SIZE;
+
+        // remove current node from list
+        prev_mem_node->next = current_mem_node->next;
+        if (current_mem_node->next != NULL_POINTER) {
+            current_mem_node->next->prev = prev_mem_node;
+        }
+    }
+}
+
 void mem_free(void *p) {
     // move along, nothing to free here
     if (p == NULL_POINTER) {
@@ -107,31 +138,9 @@ void mem_free(void *p) {
     // mark block as unused
     current_mem_node->used = false;
 
-    // check if next node can be merged into current node
-    dynamic_mem_node_t *next_mem_node = current_mem_node->next;
-    if (next_mem_node != NULL_POINTER && !next_mem_node->used) {
-        // add size of next block to current block
-        current_mem_node->size += current_mem_node->next->size;
-        current_mem_node->size += DYNAMIC_MEM_NODE_SIZE;
-
-        // remove next block from list
-        current_mem_node->next = current_mem_node->next->next;
-        if (current_mem_node->next != NULL_POINTER) {
-            current_mem_node->next->prev = current_mem_node;
-        }
-    }
-
-    // check if current node can be merged into previous node
-    dynamic_mem_node_t *prev_mem_node = current_mem_node->prev;
-    if (prev_mem_node != NULL_POINTER && !prev_mem_node->used) {
-        // add size of previous block to current block
-        prev_mem_node->size += current_mem_node->size;
-        prev_mem_node->size += DYNAMIC_MEM_NODE_SIZE;
-
-        // remove current node from list
-        prev_mem_node->next = current_mem_node->next;
-        if (current_mem_node->next != NULL_POINTER) {
-            current_mem_node->next->prev = prev_mem_node;
-        }
-    }
+    // merge unused blocks
+    current_mem_node = merge_next_node_into_current(current_mem_node);
+    merge_current_node_into_previous(current_mem_node);
 }
+
+// TODO print list structure
