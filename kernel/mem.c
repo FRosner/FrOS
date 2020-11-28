@@ -36,13 +36,13 @@ void init_dynamic_mem() {
     dynamic_mem_start->prev = NULL_POINTER;
 }
 
-void *mem_alloc(size_t size) {
+void *find_best_mem_block(dynamic_mem_node_t *dynamic_mem, size_t size) {
     // initialize the result pointer with NULL and an invalid block size
     dynamic_mem_node_t *best_mem_block = (dynamic_mem_node_t *) NULL_POINTER;
-    uint32_t best_mem_block_size = DYNAMIC_MEM_TOTAL_SIZE + 1; /* init with invalid size */
+    uint32_t best_mem_block_size = DYNAMIC_MEM_TOTAL_SIZE + 1;
 
     // start looking for the best (smallest unused) block at the beginning
-    dynamic_mem_node_t *current_mem_block = dynamic_mem_start;
+    dynamic_mem_node_t *current_mem_block = dynamic_mem;
     while (current_mem_block) {
         // check if block can be used and is smaller than current best
         if ((!current_mem_block->used) &&
@@ -56,6 +56,12 @@ void *mem_alloc(size_t size) {
         // move to next block
         current_mem_block = current_mem_block->next;
     }
+    return best_mem_block;
+}
+
+void *mem_alloc(size_t size) {
+    dynamic_mem_node_t *best_mem_block =
+            (dynamic_mem_node_t *) find_best_mem_block(dynamic_mem_start, size);
 
     // check if we actually found a matching (free, large enough) block
     if (best_mem_block != NULL_POINTER) {
