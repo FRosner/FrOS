@@ -7,23 +7,24 @@
 #include "util.h"
 #include "mem.h"
 
-void* alloc_and_print(int n) {
+void* alloc(int n) {
     int *ptr = (int *) mem_alloc(n * sizeof(int));
     if (ptr == NULL_POINTER) {
         print_string("Memory not allocated.\n");
     } else {
         // Get the elements of the array
         for (int i = 0; i < n; ++i) {
-            ptr[i] = i + 1; // shorthand for *(ptr + i)
+//            ptr[i] = i + 1; // shorthand for *(ptr + i)
         }
 
         for (int i = 0; i < n; ++i) {
-            char str[256];
-            int_to_string(ptr[i], str);
-            print_string(str);
+//            char str[256];
+//            int_to_string(ptr[i], str);
+//            print_string(str);
         }
-        print_nl();
+//        print_nl();
     }
+    return ptr;
 }
 
 void start_kernel() {
@@ -41,12 +42,41 @@ void start_kernel() {
     init_dynamic_mem();
 
     clear_screen();
-    int *ptr1 = alloc_and_print(5);
-    int *ptr2 = alloc_and_print(10);
+
+    print_string("init_dynamic_mem()\n");
+    print_dynamic_node_size();
+    print_dynamic_mem();
+    print_nl();
+
+    int *ptr1 = alloc(5);
+    print_string("int *ptr1 = alloc(5)\n");
+    print_dynamic_mem();
+    print_nl();
+
+    int *ptr2 = alloc(10);
+    print_string("int *ptr2 = alloc(10)\n");
+    print_dynamic_mem();
+    print_nl();
+
     mem_free(ptr1);
-    int *ptr3 = alloc_and_print(2);
-    mem_free(ptr3);
+    print_string("mem_free(ptr1)\n");
+    print_dynamic_mem();
+    print_nl();
+
+    int *ptr3 = alloc(2);
+    print_string("int *ptr3 = alloc(2)\n");
+    print_dynamic_mem();
+    print_nl();
+
     mem_free(ptr2);
+    print_string("mem_free(ptr2)\n");
+    print_dynamic_mem();
+    print_nl();
+
+    mem_free(ptr3);
+    print_string("mem_free(ptr3)\n");
+    print_dynamic_mem();
+    print_nl();
 
     print_string("> ");
 }

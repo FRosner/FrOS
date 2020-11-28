@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "mem.h"
+#include "../drivers/display.h"
+#include "util.h"
 
 // http://www.sunshine2k.de/articles/coding/cmemalloc/cmemory.html#ch33
 
@@ -34,6 +36,36 @@ void init_dynamic_mem() {
     dynamic_mem_start->size = DYNAMIC_MEM_TOTAL_SIZE - DYNAMIC_MEM_NODE_SIZE;
     dynamic_mem_start->next = NULL_POINTER;
     dynamic_mem_start->prev = NULL_POINTER;
+}
+
+void print_dynamic_node_size() {
+    char node_size_string[256];
+    int_to_string(DYNAMIC_MEM_NODE_SIZE, node_size_string);
+    print_string("DYNAMIC_MEM_NODE_SIZE = ");
+    print_string(node_size_string);
+    print_nl();
+}
+
+void print_dynamic_mem_node(dynamic_mem_node_t *node) {
+    char size_string[256];
+    int_to_string(node->size, size_string);
+    print_string("{size = ");
+    print_string(size_string);
+    char used_string[256];
+    int_to_string(node->used, used_string);
+    print_string("; used = ");
+    print_string(used_string);
+    print_string("}; ");
+}
+
+void print_dynamic_mem() {
+    dynamic_mem_node_t *current = dynamic_mem_start;
+    print_string("[");
+    while (current != NULL_POINTER) {
+        print_dynamic_mem_node(current);
+        current = current->next;
+    }
+    print_string("]\n");
 }
 
 void *find_best_mem_block(dynamic_mem_node_t *dynamic_mem, size_t size) {
@@ -142,5 +174,3 @@ void mem_free(void *p) {
     current_mem_node = merge_next_node_into_current(current_mem_node);
     merge_current_node_into_previous(current_mem_node);
 }
-
-// TODO print list structure
