@@ -32,7 +32,7 @@ debug: os-image.bin kernel.elf
 	i386-elf-gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}
-	x86_64-elf-gcc -g -m32 -ffreestanding -c $< -o $@ # -g for debugging
+	x86_64-elf-gcc -g -m32 -ffreestanding -fno-pie -fno-stack-protector -c $< -o $@ # -g for debugging
 
 %.o: %.asm
 	nasm $< -f elf -o $@
