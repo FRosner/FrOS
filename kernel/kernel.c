@@ -86,7 +86,12 @@ void execute_command(char *input) {
         print_string("Stopping the CPU. Bye!\n");
         asm volatile("hlt");
     }
-    print_string("Unknown command: ");
-    print_string(input);
-    print_string("\n> ");
+    else if (compare_string(input, "") == 0) {
+        print_string("\n> ");
+    }
+    else {
+        print_string("Unknown command: ");
+        print_string(input);
+        print_string("\n> ");
+    }
 }
